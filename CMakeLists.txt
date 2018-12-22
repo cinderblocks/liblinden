@@ -9,7 +9,7 @@ set(LINDEN_SOURCE_DIR ${PROJECT_SOURCE_DIR})
 
 add_subdirectory(cmake)
 add_subdirectory(llcommon)
-add_subdirectory(llappearance)
+#add_subdirectory(llappearance)
 add_subdirectory(llcharacter)
 add_subdirectory(llinventory)
 add_subdirectory(llmath)
