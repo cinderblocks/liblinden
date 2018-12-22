@@ -1,15 +1,9 @@
 # -*- cmake -*-
 
 project(llinventory)
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.13)
 
 set(CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
-#include(LLCommon)
-#include(LLCoreHttp)
-#include(LLMath)
-#include(LLMessage)
-#include(LLVFS)
-#include(LLXML)
 
 set(llinventory_SOURCE_FILES
     llcategory.cpp
@@ -55,3 +49,7 @@ list(APPEND llinventory_SOURCE_FILES ${llinventory_HEADER_FILES})
 
 add_library (llinventory ${llinventory_SOURCE_FILES})
 
+target_link_libraries(
+    llinventory PUBLIC
+    llcommon
+    )

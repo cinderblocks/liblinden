@@ -1,7 +1,7 @@
 # -*- cmake -*-
 
 project(llvfs)
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.13)
 
 set(CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 #include(LLCommon)
@@ -60,14 +60,9 @@ list(APPEND llvfs_SOURCE_FILES ${llvfs_HEADER_FILES})
 
 add_library (llvfs ${llvfs_SOURCE_FILES})
 
-target_link_libraries(llvfs
+target_link_libraries(
+    llvfs PUBLIC
+    llcommon
 #    ${LLCOMMON_LIBRARIES}
 #    ${vfs_BOOST_LIBRARIES}
     )
-
-if (DARWIN)
-  include(CMakeFindFrameworks)
-  find_library(COCOA_LIBRARY Cocoa)
-  target_link_libraries(llvfs ${COCOA_LIBRARY})
-endif (DARWIN)
-

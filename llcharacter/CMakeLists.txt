@@ -1,7 +1,7 @@
 # -*- cmake -*-
 
 project(llcharacter)
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.13)
 
 set(CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 #include(LLCommon)
@@ -70,7 +70,12 @@ list(APPEND llcharacter_SOURCE_FILES ${llcharacter_HEADER_FILES})
 add_library (llcharacter ${llcharacter_SOURCE_FILES})
 
 target_link_libraries(
-    llcharacter
+    llcharacter PUBLIC
+    llcommon
+    llmath
+    llmessage
+    llvfs
+    llxml
 #    ${LLCOMMON_LIBRARIES}
 #    ${LLMATH_LIBRARIES}
 #    ${LLMESSAGE_LIBRARIES}

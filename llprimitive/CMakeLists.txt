@@ -1,7 +1,7 @@
 # -*- cmake -*-
 
 project(llprimitive)
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.13)
 
 set(CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 #include(LLCommon)
@@ -58,6 +58,12 @@ list(APPEND llprimitive_SOURCE_FILES ${llprimitive_HEADER_FILES})
 add_library (llprimitive ${llprimitive_SOURCE_FILES})
 
 target_link_libraries(llprimitive
+    llcommon
+    llmath
+    llmessage
+    llcorehttp
+    llxml
+    llcharacter
 #    ${LLCOMMON_LIBRARIES}
 #    ${LLMATH_LIBRARIES}
 #    ${LLMESSAGE_LIBRARIES}

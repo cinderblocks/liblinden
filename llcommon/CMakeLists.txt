@@ -2,7 +2,7 @@
 # -*- cmake -*-
 
 project(llcommon)
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.13)
 
 set(CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 #include(LLCommon)
@@ -246,7 +246,7 @@ find_package(zlib)
 find_package(expat)
 
 target_link_libraries(
-    llcommon
+    llcommon PUBLIC
     expat::expat
     zlib::zlib
     boost::boost

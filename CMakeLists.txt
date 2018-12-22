@@ -1,11 +1,10 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.13)
 project(liblinden)
 
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_COLOR_MAKEFILE ON)
-set(LINDEN_SOURCE_DIR ${PROJECT_SOURCE_DIR})
 
 add_subdirectory(cmake)
 add_subdirectory(llcommon)
@@ -27,10 +26,6 @@ ENDIF(NOT CMAKE_BUILD_TYPE)
 
 find_package(Threads REQUIRED)
 
-include_directories(
-
-    )
-
 set(liblinden_SOURCE_FILES
     liblinden.cpp
     )
@@ -42,9 +37,6 @@ set(liblinden_HEADER_FILES
 list(APPEND liblinden_SOURCE_FILES ${liblinden_HEADER_FILES})
 set_source_files_properties(${liblinden_HEADER_FILES}
     PROPERTIES HEADER_FILE_ONLY TRUE )
-
-link_directories(
-    )
 
 add_definitions(-DNO_PRECOMPILED_HEADERS)
 add_library(liblinden STATIC ${liblinden_SOURCE_FILES})
