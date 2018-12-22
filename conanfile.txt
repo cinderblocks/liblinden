@@ -8,9 +8,12 @@ zlib/1.2.11@conan/stable
 [options]
 boost:shared=False
 expat:shared=False
+libcurl:darwin_ssl=False
+libcurl:with_openssl=True
 libcurl:shared=False
 OpenSSL:shared=False
 zlib:shared=False
 
 [generators]
 cmake
+cmake_find_package

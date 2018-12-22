@@ -1,8 +1,9 @@
 # -*- cmake -*-
 
 project(llxml)
+cmake_minimum_required(VERSION 3.1)
 
-include(../conanbuildinfo.cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 #include(LLCommon)
 #include(LLMath)
 #include(LLVFS)
@@ -31,10 +32,10 @@ set_source_files_properties(${llxml_HEADER_FILES}
 list(APPEND llxml_SOURCE_FILES ${llxml_HEADER_FILES})
 
 add_library (llxml ${llxml_SOURCE_FILES})
-# Libraries on which this library depends, needed for Linux builds
-# Sort by high-level to low-level
+find_package(expat)
+
 target_link_libraries( llxml
-    ${CONAN_LIBS}
+    expat::expat
 #    ${LLVFS_LIBRARIES}
 #    ${LLMATH_LIBRARIES}
 #    ${LLCOMMON_LIBRARIES}

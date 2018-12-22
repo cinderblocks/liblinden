@@ -1,10 +1,11 @@
 # -*- cmake -*-
 
 project(llcorehttp)
+cmake_minimum_required(VERSION 3.1)
 
-include(../conanbuildinfo.cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 #include(CURL)
-##include(OpenSSL)
+#include(OpenSSL)
 #include(NGHTTP2)
 #include(ZLIB)
 #include(LLCoreHttp)
@@ -81,9 +82,15 @@ endif (DARWIN OR LINUX)
 list(APPEND llcorehttp_SOURCE_FILES ${llcorehttp_HEADER_FILES})
 
 add_library (llcorehttp ${llcorehttp_SOURCE_FILES})
+find_package(libcurl)
+find_package(OpenSSL)
+find_package(boost)
+
 target_link_libraries(
   llcorehttp
-  ${CONAN_LIBS}
+  libcurl::libcurl
+  OpenSSL::OpenSSL
+  boost::boost
 #  ${CURL_LIBRARIES}
 #  ${OPENSSL_LIBRARIES}
 #  ${CRYPTO_LIBRARIES}

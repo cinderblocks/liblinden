@@ -1,8 +1,9 @@
 # -*- cmake -*-
 
 project(llprimitive)
+cmake_minimum_required(VERSION 3.1)
 
-include(../conanbuildinfo.cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 #include(LLCommon)
 #include(LLMath)
 #include(LLMessage)
@@ -57,7 +58,6 @@ list(APPEND llprimitive_SOURCE_FILES ${llprimitive_HEADER_FILES})
 add_library (llprimitive ${llprimitive_SOURCE_FILES})
 
 target_link_libraries(llprimitive
-    ${CONAN_LIBS}
 #    ${LLCOMMON_LIBRARIES}
 #    ${LLMATH_LIBRARIES}
 #    ${LLMESSAGE_LIBRARIES}

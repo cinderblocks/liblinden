@@ -2,8 +2,9 @@
 # -*- cmake -*-
 
 project(llcommon)
+cmake_minimum_required(VERSION 3.1)
 
-include(../conanbuildinfo.cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 #include(LLCommon)
 #include(Boost)
 #include(JsonCpp)
@@ -240,10 +241,15 @@ set_source_files_properties(${llcommon_HEADER_FILES}
 list(APPEND llcommon_SOURCE_FILES ${llcommon_HEADER_FILES})
 
 add_library (llcommon ${llcommon_SOURCE_FILES})
+find_package(boost)
+find_package(zlib)
+find_package(expat)
 
 target_link_libraries(
     llcommon
-    ${CONAN_LIBS}
+    expat::expat
+    zlib::zlib
+    boost::boost
 #    ${APRUTIL_LIBRARIES}
 #    ${APR_LIBRARIES}
 #    ${EXPAT_LIBRARIES}

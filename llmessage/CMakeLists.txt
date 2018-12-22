@@ -1,8 +1,9 @@
 # -*- cmake -*-
 
 project(llmessage)
+cmake_minimum_required(VERSION 3.1)
 
-include(../conanbuildinfo.cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 #include(LLCommon)
 #include(LLCoreHttp)
 #include(LLMath)
@@ -200,7 +201,6 @@ add_library (llmessage ${llmessage_SOURCE_FILES})
 
 target_link_libraries(
   llmessage
-  ${CONAN_LIBS}
 #  ${CURL_LIBRARIES}
 #  ${LLCOMMON_LIBRARIES}
 #  ${LLVFS_LIBRARIES}

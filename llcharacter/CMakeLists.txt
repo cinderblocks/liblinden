@@ -1,8 +1,9 @@
 # -*- cmake -*-
 
 project(llcharacter)
+cmake_minimum_required(VERSION 3.1)
 
-include(../conanbuildinfo.cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 #include(LLCommon)
 #include(LLMath)
 #include(LLMessage)
@@ -70,7 +71,6 @@ add_library (llcharacter ${llcharacter_SOURCE_FILES})
 
 target_link_libraries(
     llcharacter
-    ${CONAN_LIBS}
 #    ${LLCOMMON_LIBRARIES}
 #    ${LLMATH_LIBRARIES}
 #    ${LLMESSAGE_LIBRARIES}

@@ -1,8 +1,9 @@
 # -*- cmake -*-
 
 project(llmath)
+cmake_minimum_required(VERSION 3.1)
 
-include(../conanbuildinfo.cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 #include(LLCommon)
 
 set(llmath_SOURCE_FILES
@@ -97,6 +98,5 @@ list(APPEND llmath_SOURCE_FILES ${llmath_HEADER_FILES})
 add_library (llmath ${llmath_SOURCE_FILES})
 
 target_link_libraries(llmath
-    ${CONAN_LIBS}
     )
 
