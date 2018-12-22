@@ -1,4 +1,6 @@
 [requires]
+apache-apr/1.6.5@radegast/stable
+apache-apr-util/1.6.1@radegast/stable
 boost/1.69.0@conan/stable
 expat/2.2.5@bincrafters/stable
 libcurl/7.56.1@bincrafters/stable

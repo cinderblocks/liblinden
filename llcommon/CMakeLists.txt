@@ -241,13 +241,17 @@ set_source_files_properties(${llcommon_HEADER_FILES}
 list(APPEND llcommon_SOURCE_FILES ${llcommon_HEADER_FILES})
 
 add_library (llcommon ${llcommon_SOURCE_FILES})
+find_package(apache-apr)
+#find_package(apache-apr-util)
 find_package(boost)
-find_package(zlib)
 find_package(expat)
 find_package(OpenSSL)
+find_package(zlib)
 
 target_link_libraries(
     llcommon PUBLIC
+    apache-apr::apache-apr
+#    apache-apr-util::apache-apr-util
     OpenSSL::OpenSSL
     expat::expat
     zlib::zlib
