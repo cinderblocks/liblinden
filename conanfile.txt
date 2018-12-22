@@ -1,0 +1,11 @@
+[requires]
+boost_core/1.69.0@bincrafters/stable
+libcurl/7.56.1@bincrafters/stable
+zlib/1.2.11@conan/stable
+
+[options]
+libcurl:shared=False
+zlib:shared=False
+
+[generators]
+cmake

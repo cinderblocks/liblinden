@@ -2,7 +2,6 @@
 
 project(llcharacter)
 
-include(00-Common)
 include(LLCommon)
 include(LLMath)
 include(LLMessage)
@@ -88,15 +87,4 @@ target_link_libraries(
     ${LLVFS_LIBRARIES}
     ${LLXML_LIBRARIES}
     )
-
-
-# Add tests
-#if (LL_TESTS)
-#    include(LLAddBuildTest)
-#    # UNIT TESTS
-#    SET(llcharacter_TEST_SOURCE_FILES
-#      lljoint.cpp
-#      )
-#    LL_ADD_PROJECT_UNIT_TESTS(llcharacter "${llcharacter_TEST_SOURCE_FILES}")
-#endif (LL_TESTS)
 

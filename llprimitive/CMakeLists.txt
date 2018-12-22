@@ -2,13 +2,11 @@
 
 project(llprimitive)
 
-include(00-Common)
 include(LLCommon)
 include(LLMath)
 include(LLMessage)
 include(LLCoreHttp)
 include(LLXML)
-include(LLPhysicsExtensions)
 include(LLCharacter)
 
 include_directories(
@@ -84,12 +82,3 @@ target_link_libraries(llprimitive
     ${BOOST_CONTEXT_LIBRARY}
     )
 
-
-#add unit tests
-if (LL_TESTS)
-    INCLUDE(LLAddBuildTest)
-    SET(llprimitive_TEST_SOURCE_FILES
-      llmediaentry.cpp
-      )
-    LL_ADD_PROJECT_UNIT_TESTS(llprimitive "${llprimitive_TEST_SOURCE_FILES}")
-endif (LL_TESTS)

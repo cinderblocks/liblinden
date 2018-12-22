@@ -2,7 +2,6 @@
 
 project(llappearance)
 
-include(00-Common)
 include(LLCommon)
 include(LLCharacter)
 include(LLImage)
@@ -14,7 +13,6 @@ include(LLRender)
 include(LLVFS)
 include(LLWindow)
 include(LLXML)
-include(Linking)
 
 include_directories(
     ${LLCOMMON_INCLUDE_DIRS}
@@ -110,14 +108,3 @@ if (BUILD_HEADLESS)
       )
 endif (BUILD_HEADLESS)
 
-#add unit tests
-#if (LL_TESTS)
-#    INCLUDE(LLAddBuildTest)
-#    SET(llappearance_TEST_SOURCE_FILES
-#      # no real unit tests yet!
-#      )
-#    LL_ADD_PROJECT_UNIT_TESTS(llappearance "${llappearance_TEST_SOURCE_FILES}")
-
-    #set(TEST_DEBUG on)
-#    set(test_libs llappearance ${LLCOMMON_LIBRARIES})
-#endif (LL_TESTS)

@@ -2,7 +2,6 @@
 
 project(llinventory)
 
-include(00-Common)
 include(LLCommon)
 include(LLCoreHttp)
 include(LLMath)
@@ -61,18 +60,3 @@ list(APPEND llinventory_SOURCE_FILES ${llinventory_HEADER_FILES})
 
 add_library (llinventory ${llinventory_SOURCE_FILES})
 
-
-
-#add unit tests
-if (LL_TESTS)
-    INCLUDE(LLAddBuildTest)
-    SET(llinventory_TEST_SOURCE_FILES
-      # no real unit tests yet!
-      )
-    LL_ADD_PROJECT_UNIT_TESTS(llinventory "${llinventory_TEST_SOURCE_FILES}")
-
-    #set(TEST_DEBUG on)
-    set(test_libs llinventory ${LLMESSAGE_LIBRARIES} ${LLVFS_LIBRARIES} ${LLCOREHTTP_LIBRARIES} ${LLMATH_LIBRARIES} ${LLCOMMON_LIBRARIES} ${WINDOWS_LIBRARIES})
-    LL_ADD_INTEGRATION_TEST(inventorymisc "" "${test_libs}")
-    LL_ADD_INTEGRATION_TEST(llparcel "" "${test_libs}")
-endif (LL_TESTS)

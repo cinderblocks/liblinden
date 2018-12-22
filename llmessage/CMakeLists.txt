@@ -2,18 +2,11 @@
 
 project(llmessage)
 
-include(00-Common)
-include(GoogleMock)
-include(LLAddBuildTest)
 include(LLCommon)
 include(LLCoreHttp)
 include(LLMath)
 include(LLMessage)
 include(LLVFS)
-include(LLAddBuildTest)
-include(Python)
-include(Tut)
-include(Python)
 include(JsonCpp)
 
 include_directories (${CMAKE_CURRENT_SOURCE_DIR})
@@ -240,55 +233,4 @@ target_link_libraries(
   ${BOOST_SYSTEM_LIBRARY}
   )
 endif(LINUX)
-
-# tests
-if (LL_TESTS)
-  SET(llmessage_TEST_SOURCE_FILES
-    llnamevalue.cpp
-    lltrustedmessageservice.cpp
-    lltemplatemessagedispatcher.cpp
-    )
-  LL_ADD_PROJECT_UNIT_TESTS(llmessage "${llmessage_TEST_SOURCE_FILES}")
-
-  
-  #    set(TEST_DEBUG on)
-  
-if (LINUX)
-  set(test_libs
-    ${WINDOWS_LIBRARIES}
-    ${LLVFS_LIBRARIES}
-    ${LLMATH_LIBRARIES}
-    ${CURL_LIBRARIES}
-    ${NGHTTP2_LIBRARIES}
-    ${LLCOMMON_LIBRARIES}
-    ${LLMESSAGE_LIBRARIES}
-    ${LLCOREHTTP_LIBRARIES}
-    ${JSONCPP_LIBRARIES}
-    ${BOOST_COROUTINE_LIBRARY}
-    ${BOOST_CONTEXT_LIBRARY}
-    rt
-    ${GOOGLEMOCK_LIBRARIES}
-    )
-else (LINUX)
-  set(test_libs
-    ${WINDOWS_LIBRARIES}
-    ${LLVFS_LIBRARIES}
-    ${LLMATH_LIBRARIES}
-    ${CURL_LIBRARIES}
-    ${NGHTTP2_LIBRARIES}
-    ${LLCOMMON_LIBRARIES}
-    ${LLMESSAGE_LIBRARIES}
-    ${LLCOREHTTP_LIBRARIES}
-    ${JSONCPP_LIBRARIES}
-    ${BOOST_COROUTINE_LIBRARY}
-    ${BOOST_CONTEXT_LIBRARY}
-    ${GOOGLEMOCK_LIBRARIES}
-    )
-endif(LINUX)
-
-  #LL_ADD_INTEGRATION_TEST(llavatarnamecache "" "${test_libs}")
-  LL_ADD_INTEGRATION_TEST(llhost "" "${test_libs}")
-  LL_ADD_INTEGRATION_TEST(llpartdata "" "${test_libs}")
-  LL_ADD_INTEGRATION_TEST(llxfer_file "" "${test_libs}")
-endif (LL_TESTS)
 
