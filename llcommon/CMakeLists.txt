@@ -244,9 +244,11 @@ add_library (llcommon ${llcommon_SOURCE_FILES})
 find_package(boost)
 find_package(zlib)
 find_package(expat)
+find_package(OpenSSL)
 
 target_link_libraries(
     llcommon PUBLIC
+    OpenSSL::OpenSSL
     expat::expat
     zlib::zlib
     boost::boost
