@@ -2,27 +2,13 @@
 
 project(llprimitive)
 
-include(LLCommon)
-include(LLMath)
-include(LLMessage)
-include(LLCoreHttp)
-include(LLXML)
-include(LLCharacter)
-
-include_directories(
-    ${LLCOMMON_INCLUDE_DIRS}
-    ${LLMATH_INCLUDE_DIRS}
-    ${LLMESSAGE_INCLUDE_DIRS}
-    ${LLXML_INCLUDE_DIRS}
-    ${LIBS_PREBUILT_DIR}/include/collada
-    ${LIBS_PREBUILT_DIR}/include/collada/1.4
-    ${LLCHARACTER_INCLUDE_DIRS}
-    )
-include_directories(SYSTEM
-    ${LLCOMMON_SYSTEM_INCLUDE_DIRS}
-    ${LLXML_SYSTEM_INCLUDE_DIRS}
-    ${LLPHYSICSEXTENSIONS_INCLUDE_DIRS}
-    )
+include(../conanbuildinfo.cmake)
+#include(LLCommon)
+#include(LLMath)
+#include(LLMessage)
+#include(LLCoreHttp)
+#include(LLXML)
+#include(LLCharacter)
 
 set(llprimitive_SOURCE_FILES
     lldaeloader.cpp
@@ -71,14 +57,15 @@ list(APPEND llprimitive_SOURCE_FILES ${llprimitive_HEADER_FILES})
 add_library (llprimitive ${llprimitive_SOURCE_FILES})
 
 target_link_libraries(llprimitive
-    ${LLCOMMON_LIBRARIES}
-    ${LLMATH_LIBRARIES}
-    ${LLMESSAGE_LIBRARIES}
-    ${LLCOREHTTP_LIBRARIES}
-    ${LLXML_LIBRARIES}
-    ${LLPHYSICSEXTENSIONS_LIBRARIES}
-    ${LLCHARACTER_LIBRARIES}
-    ${BOOST_COROUTINE_LIBRARY}
-    ${BOOST_CONTEXT_LIBRARY}
+    ${CONAN_LIBS}
+#    ${LLCOMMON_LIBRARIES}
+#    ${LLMATH_LIBRARIES}
+#    ${LLMESSAGE_LIBRARIES}
+#    ${LLCOREHTTP_LIBRARIES}
+#    ${LLXML_LIBRARIES}
+#    ${LLPHYSICSEXTENSIONS_LIBRARIES}
+#    ${LLCHARACTER_LIBRARIES}
+#    ${BOOST_COROUTINE_LIBRARY}
+#    ${BOOST_CONTEXT_LIBRARY}
     )
 

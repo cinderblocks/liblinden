@@ -3,20 +3,12 @@
 
 project(llcommon)
 
-include(LLCommon)
-include(Boost)
-include(JsonCpp)
-include(ZLIB)
-include(URIPARSER)
-
-include_directories(
-    ${EXPAT_INCLUDE_DIRS}
-    ${LLCOMMON_INCLUDE_DIRS}
-    ${JSONCPP_INCLUDE_DIR}
-    ${ZLIB_INCLUDE_DIRS}
-    ${BREAKPAD_INCLUDE_DIRECTORIES}
-    ${URIPARSER_INCLUDE_DIRS}
-    )
+include(../conanbuildinfo.cmake)
+#include(LLCommon)
+#include(Boost)
+#include(JsonCpp)
+#include(ZLIB)
+#include(URIPARSER)
 
 set(llcommon_SOURCE_FILES
     indra_constants.cpp
@@ -251,18 +243,19 @@ add_library (llcommon ${llcommon_SOURCE_FILES})
 
 target_link_libraries(
     llcommon
-    ${APRUTIL_LIBRARIES}
-    ${APR_LIBRARIES}
-    ${EXPAT_LIBRARIES}
-    ${JSONCPP_LIBRARIES}
-    ${ZLIB_LIBRARIES}
-    ${WINDOWS_LIBRARIES}
-    ${BOOST_COROUTINE_LIBRARY}
-    ${BOOST_CONTEXT_LIBRARY}
-    ${BOOST_PROGRAM_OPTIONS_LIBRARY}
-    ${BOOST_REGEX_LIBRARY}
-    ${BOOST_SYSTEM_LIBRARY}
-    ${GOOGLE_PERFTOOLS_LIBRARIES}
-    ${URIPARSER_LIBRARIES}
+    ${CONAN_LIBS}
+#    ${APRUTIL_LIBRARIES}
+#    ${APR_LIBRARIES}
+#    ${EXPAT_LIBRARIES}
+#    ${JSONCPP_LIBRARIES}
+#    ${ZLIB_LIBRARIES}
+#    ${WINDOWS_LIBRARIES}
+#    ${BOOST_COROUTINE_LIBRARY}
+#    ${BOOST_CONTEXT_LIBRARY}
+#    ${BOOST_PROGRAM_OPTIONS_LIBRARY}
+#    ${BOOST_REGEX_LIBRARY}
+#    ${BOOST_SYSTEM_LIBRARY}
+#    ${GOOGLE_PERFTOOLS_LIBRARIES}
+#    ${URIPARSER_LIBRARIES}
     )
 

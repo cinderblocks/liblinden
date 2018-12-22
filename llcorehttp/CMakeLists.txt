@@ -2,21 +2,16 @@
 
 project(llcorehttp)
 
-include(CURL)
-include(OpenSSL)
-include(NGHTTP2)
-include(ZLIB)
-include(LLCoreHttp)
-include(LLMessage)
-include(LLCommon)
+include(../conanbuildinfo.cmake)
+#include(CURL)
+##include(OpenSSL)
+#include(NGHTTP2)
+#include(ZLIB)
+#include(LLCoreHttp)
+#include(LLMessage)
+#include(LLCommon)
 
 include_directories (${CMAKE_CURRENT_SOURCE_DIR})
-
-include_directories(
-    ${LLMESSAGE_INCLUDE_DIRS}
-    ${LLCOMMON_INCLUDE_DIRS}
-    ${LLCOREHTTP_INCLUDE_DIRS}
-    )
 
 set(llcorehttp_SOURCE_FILES
     bufferarray.cpp
@@ -88,11 +83,12 @@ list(APPEND llcorehttp_SOURCE_FILES ${llcorehttp_HEADER_FILES})
 add_library (llcorehttp ${llcorehttp_SOURCE_FILES})
 target_link_libraries(
   llcorehttp
-  ${CURL_LIBRARIES}
-  ${OPENSSL_LIBRARIES}
-  ${CRYPTO_LIBRARIES}
-  ${NGHTTP2_LIBRARIES}
-  ${BOOST_THREAD_LIBRARY}
-  ${BOOST_SYSTEM_LIBRARY}
+  ${CONAN_LIBS}
+#  ${CURL_LIBRARIES}
+#  ${OPENSSL_LIBRARIES}
+#  ${CRYPTO_LIBRARIES}
+#  ${NGHTTP2_LIBRARIES}
+#  ${BOOST_THREAD_LIBRARY}
+#  ${BOOST_SYSTEM_LIBRARY}
   )
 

@@ -2,12 +2,13 @@
 
 project(llmessage)
 
-include(LLCommon)
-include(LLCoreHttp)
-include(LLMath)
-include(LLMessage)
-include(LLVFS)
-include(JsonCpp)
+include(../conanbuildinfo.cmake)
+#include(LLCommon)
+#include(LLCoreHttp)
+#include(LLMath)
+#include(LLMessage)
+#include(LLVFS)
+#include(JsonCpp)
 
 include_directories (${CMAKE_CURRENT_SOURCE_DIR})
 
@@ -197,40 +198,21 @@ list(APPEND llmessage_SOURCE_FILES ${llmessage_HEADER_FILES})
 
 add_library (llmessage ${llmessage_SOURCE_FILES})
 
-if (LINUX)
 target_link_libraries(
   llmessage
-  ${CURL_LIBRARIES}
-  ${LLCOMMON_LIBRARIES}
-  ${LLVFS_LIBRARIES}
-  ${LLMATH_LIBRARIES}
-  ${JSONCPP_LIBRARIES}
-  ${OPENSSL_LIBRARIES}
-  ${CRYPTO_LIBRARIES}
-  ${NGHTTP2_LIBRARIES}
-  ${XMLRPCEPI_LIBRARIES}
-  ${LLCOREHTTP_LIBRARIES}
-  ${BOOST_COROUTINE_LIBRARY}
-  ${BOOST_CONTEXT_LIBRARY}
-  ${BOOST_SYSTEM_LIBRARY}
-  rt
+  ${CONAN_LIBS}
+#  ${CURL_LIBRARIES}
+#  ${LLCOMMON_LIBRARIES}
+#  ${LLVFS_LIBRARIES}
+#  ${LLMATH_LIBRARIES}
+#  ${JSONCPP_LIBRARIES}
+#  ${OPENSSL_LIBRARIES}
+#  ${CRYPTO_LIBRARIES}
+#  ${NGHTTP2_LIBRARIES}
+#  ${XMLRPCEPI_LIBRARIES}
+#  ${LLCOREHTTP_LIBRARIES}
+#  ${BOOST_COROUTINE_LIBRARY}
+#  ${BOOST_CONTEXT_LIBRARY}
+#  ${BOOST_SYSTEM_LIBRARY}
   )
-else (LINUX)
-target_link_libraries(
-  llmessage
-  ${CURL_LIBRARIES}
-  ${LLCOMMON_LIBRARIES}
-  ${LLVFS_LIBRARIES}
-  ${LLMATH_LIBRARIES}
-  ${JSONCPP_LIBRARIES}
-  ${OPENSSL_LIBRARIES}
-  ${CRYPTO_LIBRARIES}
-  ${NGHTTP2_LIBRARIES}
-  ${XMLRPCEPI_LIBRARIES}
-  ${LLCOREHTTP_LIBRARIES}
-  ${BOOST_COROUTINE_LIBRARY}
-  ${BOOST_CONTEXT_LIBRARY}
-  ${BOOST_SYSTEM_LIBRARY}
-  )
-endif(LINUX)
 

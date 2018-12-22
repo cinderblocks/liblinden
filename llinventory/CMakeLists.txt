@@ -2,19 +2,13 @@
 
 project(llinventory)
 
-include(LLCommon)
-include(LLCoreHttp)
-include(LLMath)
-include(LLMessage)
-include(LLVFS)
-include(LLXML)
-
-include_directories(
-    ${LLCOMMON_INCLUDE_DIRS}
-    ${LLMATH_INCLUDE_DIRS}
-    ${LLMESSAGE_INCLUDE_DIRS}
-    ${LLXML_INCLUDE_DIRS}
-    )
+include(../conanbuildinfo.cmake)
+#include(LLCommon)
+#include(LLCoreHttp)
+#include(LLMath)
+#include(LLMessage)
+#include(LLVFS)
+#include(LLXML)
 
 set(llinventory_SOURCE_FILES
     llcategory.cpp

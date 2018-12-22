@@ -2,12 +2,8 @@
 
 project(llvfs)
 
-include(LLCommon)
-
-include_directories(
-    ${LLCOMMON_INCLUDE_DIRS}
-    ${LLCOMMON_SYSTEM_INCLUDE_DIRS}
-    )
+include(../conanbuildinfo.cmake)
+#include(LLCommon)
 
 set(llvfs_SOURCE_FILES
     lldir.cpp
@@ -63,14 +59,10 @@ list(APPEND llvfs_SOURCE_FILES ${llvfs_HEADER_FILES})
 
 add_library (llvfs ${llvfs_SOURCE_FILES})
 
-set(vfs_BOOST_LIBRARIES
-    ${BOOST_FILESYSTEM_LIBRARY}
-    ${BOOST_SYSTEM_LIBRARY}
-    )
-
 target_link_libraries(llvfs
-    ${LLCOMMON_LIBRARIES}
-    ${vfs_BOOST_LIBRARIES}
+    ${CONAN_LIBS}
+#    ${LLCOMMON_LIBRARIES}
+#    ${vfs_BOOST_LIBRARIES}
     )
 
 if (DARWIN)

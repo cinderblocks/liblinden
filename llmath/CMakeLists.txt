@@ -2,13 +2,8 @@
 
 project(llmath)
 
-include(LLCommon)
-include(Boost)
-
-include_directories(
-    ${LLCOMMON_INCLUDE_DIRS}
-    ${LLCOMMON_SYSTEM_INCLUDE_DIRS}
-    )
+include(../conanbuildinfo.cmake)
+#include(LLCommon)
 
 set(llmath_SOURCE_FILES
     llbbox.cpp
@@ -102,6 +97,6 @@ list(APPEND llmath_SOURCE_FILES ${llmath_HEADER_FILES})
 add_library (llmath ${llmath_SOURCE_FILES})
 
 target_link_libraries(llmath
-    ${LLCOMMON_LIBRARIES}
+    ${CONAN_LIBS}
     )
 

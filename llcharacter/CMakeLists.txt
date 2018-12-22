@@ -2,23 +2,12 @@
 
 project(llcharacter)
 
-include(LLCommon)
-include(LLMath)
-include(LLMessage)
-include(LLVFS)
-include(LLXML)
-
-include_directories(
-    ${LLCOMMON_INCLUDE_DIRS}
-    ${LLMATH_INCLUDE_DIRS}
-    ${LLMESSAGE_INCLUDE_DIRS}
-    ${LLVFS_INCLUDE_DIRS}
-    ${LLXML_INCLUDE_DIRS}
-    )
-include_directories(SYSTEM
-    ${LLCOMMON_SYSTEM_INCLUDE_DIRS}
-    ${LLXML_SYSTEM_INCLUDE_DIRS}
-    )
+include(../conanbuildinfo.cmake)
+#include(LLCommon)
+#include(LLMath)
+#include(LLMessage)
+#include(LLVFS)
+#include(LLXML)
 
 set(llcharacter_SOURCE_FILES
     llanimationstates.cpp
@@ -81,10 +70,11 @@ add_library (llcharacter ${llcharacter_SOURCE_FILES})
 
 target_link_libraries(
     llcharacter
-    ${LLCOMMON_LIBRARIES}
-    ${LLMATH_LIBRARIES}
-    ${LLMESSAGE_LIBRARIES}
-    ${LLVFS_LIBRARIES}
-    ${LLXML_LIBRARIES}
+    ${CONAN_LIBS}
+#    ${LLCOMMON_LIBRARIES}
+#    ${LLMATH_LIBRARIES}
+#    ${LLMESSAGE_LIBRARIES}
+#    ${LLVFS_LIBRARIES}
+#    ${LLXML_LIBRARIES}
     )
 
