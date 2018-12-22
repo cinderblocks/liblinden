@@ -32,9 +32,11 @@ include_directories(
     )
 
 set(liblinden_SOURCE_FILES
+    liblinden.cpp
     )
 
 set(liblinden_HEADER_FILES
+    liblinden.h
     )
 
 list(APPEND liblinden_SOURCE_FILES ${liblinden_HEADER_FILES})
