@@ -2,17 +2,13 @@
 
 project(llcorehttp)
 
-include(00-Common)
-include(GoogleMock)
 include(CURL)
 include(OpenSSL)
 include(NGHTTP2)
 include(ZLIB)
 include(LLCoreHttp)
-include(LLAddBuildTest)
 include(LLMessage)
 include(LLCommon)
-include(Tut)
 
 include_directories (${CMAKE_CURRENT_SOURCE_DIR})
 
@@ -99,137 +95,4 @@ target_link_libraries(
   ${BOOST_THREAD_LIBRARY}
   ${BOOST_SYSTEM_LIBRARY}
   )
-
-# tests
-if (LL_TESTS)
-  SET(llcorehttp_TEST_SOURCE_FILES
-      tests/test_allocator.cpp
-      )
-
-  set(llcorehttp_TEST_HEADER_FILS
-      tests/test_httpstatus.hpp
-      tests/test_refcounted.hpp
-      tests/test_httpoperation.hpp
-      tests/test_httprequest.hpp
-      tests/test_httprequestqueue.hpp
-      tests/test_httpheaders.hpp
-      tests/test_bufferarray.hpp
-      tests/test_bufferstream.hpp
-      )
-
-  set_source_files_properties(${llcorehttp_TEST_HEADER_FILES}
-                              PROPERTIES HEADER_FILE_ONLY TRUE)
-
-  list(APPEND llcorehttp_TEST_SOURCE_FILES ${llcorehttp_TEST_HEADER_FILES})
-
-  # LL_ADD_PROJECT_UNIT_TESTS(llcorehttp "${llcorehttp_TEST_SOURCE_FILES}")
-
-  #    set(TEST_DEBUG on)
-  set(test_libs
-      ${LLCOREHTTP_LIBRARIES}
-      ${WINDOWS_LIBRARIES}
-      ${LLMESSAGE_LIBRARIES}
-      ${LLCOMMON_LIBRARIES}
-      ${GOOGLEMOCK_LIBRARIES}
-      ${CURL_LIBRARIES}
-      ${OPENSSL_LIBRARIES}
-      ${CRYPTO_LIBRARIES}
-      ${NGHTTP2_LIBRARIES}
-      ${BOOST_THREAD_LIBRARY}
-      ${BOOST_SYSTEM_LIBRARY}
-      )
-
-  # If http_proxy is in the current environment (e.g. to fetch s3-proxy
-  # autobuild packages), suppress it for this integration test: it screws up
-  # the tests.
-  LL_ADD_INTEGRATION_TEST(llcorehttp
-                          "${llcorehttp_TEST_SOURCE_FILES}"
-                          "${test_libs}"
-                          "-Dhttp_proxy"
-                          ${PYTHON_EXECUTABLE}
-                          "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_llcorehttp_peer.py"
-                          )
-
-if (DARWIN)
-  # Path inside the app bundle where we'll need to copy libraries
-  set(LL_TEST_DESTINATION_DIR
-    ${CMAKE_BINARY_DIR}/sharedlibs/Resources
-  )
-
-  # Create the Contents/Resources directory
-  add_custom_command(
-    TARGET INTEGRATION_TEST_llcorehttp PRE_BUILD
-    COMMAND ${CMAKE_COMMAND}
-    ARGS
-      -E
-      make_directory
-      ${LL_TEST_DESTINATION_DIR}
-    COMMENT "Creating Resources directory in app bundle."
-  )
-  
-  # Copy the required libraries to the package app. We used to use a sequence
-  # of '${CMAKE_COMMAND} -E copy' commands, but 'cmake -E copy' does only a
-  # single file at a time: it doesn't understand wildcards. 'cmake -E copy' is
-  # for portability. This operation is Darwin-specific. We can count on the
-  # 'cp' command.
-  set(copy_dylibs
-    libapr-1.0.dylib
-    libaprutil-1.0.dylib
-    libexception_handler.dylib
-    libnghttp2*.dylib
-    ${EXPAT_COPY}
-    )
-
-  add_custom_command(TARGET INTEGRATION_TEST_llcorehttp PRE_BUILD
-    WORKING_DIRECTORY "${AUTOBUILD_INSTALL_DIR}/lib/release"
-    COMMAND cp -v
-    ${copy_dylibs}
-    ${LL_TEST_DESTINATION_DIR}
-    DEPENDS ${copy_dylibs}
-  )
-
-endif (DARWIN)
-
-  #
-  # Example Programs
-  #
-  SET(llcorehttp_EXAMPLE_SOURCE_FILES
-      examples/http_texture_load.cpp
-      )
-
-  set(example_libs
-      ${LLCOREHTTP_LIBRARIES}
-      ${WINDOWS_LIBRARIES}
-      ${LLMESSAGE_LIBRARIES}
-      ${LLCOMMON_LIBRARIES}
-      ${GOOGLEMOCK_LIBRARIES}
-      ${CURL_LIBRARIES}
-      ${OPENSSL_LIBRARIES}
-      ${CRYPTO_LIBRARIES}
-      ${NGHTTP2_LIBRARIES}
-      ${BOOST_THREAD_LIBRARY}
-      ${BOOST_SYSTEM_LIBRARY}
-      )
-
-  add_executable(http_texture_load
-                 ${llcorehttp_EXAMPLE_SOURCE_FILES}
-                 )
-  set_target_properties(http_texture_load
-                        PROPERTIES
-                        RUNTIME_OUTPUT_DIRECTORY "${EXE_STAGING_DIR}"
-                        )
-
-  if (WINDOWS)
-    # The following come from LLAddBuildTest.cmake's INTEGRATION_TEST_xxxx target.
-    set_target_properties(http_texture_load
-                          PROPERTIES
-                          LINK_FLAGS "/debug /NODEFAULTLIB:LIBCMT /SUBSYSTEM:CONSOLE"
-                          LINK_FLAGS_DEBUG "/NODEFAULTLIB:\"LIBCMT;LIBCMTD;MSVCRT\" /INCREMENTAL:NO"
-                          LINK_FLAGS_RELEASE ""
-                          )
-  endif (WINDOWS)
-
-  target_link_libraries(http_texture_load ${example_libs})
-
-endif (LL_TESTS)
 
