@@ -23,12 +23,10 @@ IF (NOT CMAKE_BUILD_TYPE)
             "Build type. One of: Debug Release RelWithDebInfo" FORCE)
 ENDIF(NOT CMAKE_BUILD_TYPE)
 
-set(CMAKE_CXX_STANDARD 14)
-
 include(conanbuildinfo.cmake)
 conan_basic_setup()
 
-ucm_set_runtime(STATIC)
+#ucm_set_runtime(STATIC)
 
 find_package(Threads REQUIRED)
 
