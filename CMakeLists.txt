@@ -13,12 +13,17 @@ IF (NOT CMAKE_BUILD_TYPE)
             "Build type. One of: Debug Release RelWithDebInfo" FORCE)
 ENDIF(NOT CMAKE_BUILD_TYPE)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 if (CMAKE_SYSTEM_NAME STREQUAL Windows)
     add_compile_definitions(LL_WINDOWS)
 elseif (CMAKE_SYSTEM_NAME STREQUAL Linux)
     add_compile_definitions(LL_LINUX)
 elseif (CMAKE_SYSTEM_NAME STREQUAL Darwin)
     add_compile_definitions(LL_DARWIN)
+
 else ()
     message(WARNING "${CMAKE_SYSTEM_NAME} not officially supported at this time")
 endif()
