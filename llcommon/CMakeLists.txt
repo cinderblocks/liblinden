@@ -243,7 +243,11 @@ list(APPEND llcommon_SOURCE_FILES ${llcommon_HEADER_FILES})
 add_library (llcommon ${llcommon_SOURCE_FILES})
 find_package(apache-apr)
 #find_package(apache-apr-util)
-find_package(boost)
+find_package(boost_coroutine)
+find_package(boost_context)
+find_package(boost_program_options)
+find_package(boost_regex)
+find_package(boost_system)
 find_package(expat)
 find_package(OpenSSL)
 find_package(zlib)
@@ -255,7 +259,11 @@ target_link_libraries(
     OpenSSL::OpenSSL
     expat::expat
     zlib::zlib
-    boost::boost
+    boost_coroutine::boost_coroutine
+    boost_context::boost_context
+    boost_program_options::boost_program_options
+    boost_regex::boost_regex
+    boost_system::boost_system
 #    ${APRUTIL_LIBRARIES}
 #    ${APR_LIBRARIES}
 #    ${EXPAT_LIBRARIES}

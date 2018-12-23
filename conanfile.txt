@@ -1,14 +1,24 @@
 [requires]
+boost_context/1.69.0@bincrafters/stable
+boost_coroutine/1.69.0@bincrafters/stable
+boost_date_time/1.69.0@bincrafters/stable
+boost_filesystem/1.69.0@bincrafters/stable
+boost_iostreams/1.69.0@bincrafters/stable
+boost_program_options/1.69.0@bincrafters/stable
+boost_regex/1.69.0@bincrafters/stable
+boost_signals2/1.69.0@bincrafters/stable
+boost_system/1.69.0@bincrafters/stable
+boost_thread/1.69.0@bincrafters/stable
 apache-apr/1.6.5@radegast/stable
 apache-apr-util/1.6.1@radegast/stable
-boost/1.69.0@conan/stable
 expat/2.2.5@bincrafters/stable
 libcurl/7.56.1@bincrafters/stable
 OpenSSL/1.1.1a@conan/stable
 zlib/1.2.11@conan/stable
 
 [options]
-boost:shared=False
+boost_*:shared=False
+boost_regex:use_icu=True
 expat:shared=False
 libcurl:darwin_ssl=False
 libcurl:with_openssl=True
