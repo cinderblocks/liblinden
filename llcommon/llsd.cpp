@@ -31,10 +31,11 @@
 #include "llsd.h"
 
 #include "llerror.h"
-#include "../llmath/llmath.h"
 #include "llformat.h"
 #include "llsdserialize.h"
 #include "stringize.h"
+
+#include <cmath>
 
 #ifndef LL_RELEASE_FOR_DOWNLOAD
 #define NAME_UNNAMED_NAMESPACE
@@ -249,10 +250,10 @@ namespace
 	};
 
 	LLSD::Boolean ImplReal::asBoolean() const
-		{ return !llisnan(mValue)  &&  mValue != 0.0; }
+        { return !std::isnan(mValue)  &&  mValue != 0.0; }
 		
 	LLSD::Integer ImplReal::asInteger() const
-		{ return !llisnan(mValue) ? (LLSD::Integer)mValue : 0; }
+        { return !std::isnan(mValue) ? (LLSD::Integer)mValue : 0; }
 		
 	LLSD::String ImplReal::asString() const
 		{ return llformat("%lg", mValue); }
