@@ -30,15 +30,14 @@
 #include "llsdserialize.h"
 #include "llpointer.h"
 #include "llstreamtools.h" // for fullread
+#include "llbase64.h"
 
 #include <iostream>
-#include "apr_base64.h"
 
-#ifdef LL_USESYSTEMLIBS
+#include <boost/iostreams/device/array.hpp>
+#include <boost/iostreams/stream.hpp>
+
 # include <zlib.h>
-#else
-# include "zlib/zlib.h"  // for davep's dirty little zip functions
-#endif
 
 #if !LL_WINDOWS
 #include <netinet/in.h> // htonl & ntohl
@@ -51,7 +50,6 @@
 
 // File constants
 static const int MAX_HDR_LEN = 20;
-static const S32 UNZIP_LLSD_MAX_DEPTH = 96;
 static const char LEGACY_NON_HEADER[] = "<llsd>";
 const std::string LLSD_BINARY_HEADER("LLSD/Binary");
 const std::string LLSD_XML_HEADER("LLSD/XML");
@@ -112,7 +110,7 @@ bool LLSDSerialize::deserialize(LLSD& sd, std::istream& str, S32 max_bytes)
 		fail_if_not_legacy = true;
 	}
 
-	if (!strncasecmp(LEGACY_NON_HEADER, hdr_buf, strlen(LEGACY_NON_HEADER))) /* Flawfinder: ignore */
+	if (!strnicmp(LEGACY_NON_HEADER, hdr_buf, strlen(LEGACY_NON_HEADER))) /* Flawfinder: ignore */
 	{
 		legacy_no_header = true;
 		inbuf = (int)str.gcount();
@@ -135,9 +133,8 @@ bool LLSDSerialize::deserialize(LLSD& sd, std::istream& str, S32 max_bytes)
 		}
 		header = hdr_buf;
 
-		std::string::size_type start = std::string::npos;
+		std::string::size_type start = header.find_first_not_of("<? ");
 		std::string::size_type end = std::string::npos;
-		start = header.find_first_not_of("<? ");
 		if (start != std::string::npos)
 		{
 			end = header.find_first_of(" ?", start);
@@ -812,12 +809,12 @@ bool LLSDNotationParser::parseBinary(std::istream& istr, LLSD& data) const
 		get(istr, *(coded_stream.rdbuf()), '\"');
 		c = get(istr);
 		std::string encoded(coded_stream.str());
-		S32 len = apr_base64_decode_len(encoded.c_str());
+		size_t len = LLBase64::requiredDecryptionSpace(encoded);
 		std::vector<U8> value;
 		if(len)
 		{
 			value.resize(len);
-			len = apr_base64_decode_binary(&value[0], encoded.c_str());
+			len = LLBase64::decode(encoded, &value[0], len);
 			value.resize(len);
 		}
 		data = value;
@@ -1711,12 +1708,12 @@ int deserialize_string_raw(
 		// *FIX: This is memory inefficient.
 		S32 len = strtol(buf + 1, NULL, 0);
 		if((max_bytes>0)&&(len>max_bytes)) return LLSDParser::PARSE_FAILURE;
-		std::vector<char> buf;
+		std::vector<char> buf2;
 		if(len)
 		{
-			buf.resize(len);
-			count += (int)fullread(istr, (char *)&buf[0], len);
-			value.assign(buf.begin(), buf.end());
+			buf2.resize(len);
+			count += (int)fullread(istr, (char *)&buf2[0], len);
+			value.assign(buf2.begin(), buf2.end());
 		}
 		c = istr.get();
 		++count;
@@ -2138,18 +2135,27 @@ std::string zip_llsd(LLSD& data)
 // and deserializes from that copy using LLSDSerialize
 LLUZipHelper::EZipRresult LLUZipHelper::unzip_llsd(LLSD& data, std::istream& is, S32 size)
 {
+	std::unique_ptr<U8 []> in;
+	try
+	{
+		in = std::make_unique<U8 []>(size);
+	}
+	catch (const std::bad_alloc&)
+	{
+		return ZR_MEM_ERROR;
+	}
+	is.read((char*)in.get(), size);
+
+	return unzip_llsd(data, in.get(), size);
+}
+
+LLUZipHelper::EZipRresult LLUZipHelper::unzip_llsd(LLSD& data, U8* in, S32 size)
+{
 	U8* result = NULL;
 	U32 cur_size = 0;
 	z_stream strm;
 		
 	const U32 CHUNK = 65536;
-
-	U8 *in = new(std::nothrow) U8[size];
-	if (!in)
-	{
-		return ZR_MEM_ERROR;
-	}
-	is.read((char*) in, size); 
 
 	U8 out[CHUNK];
 		
@@ -2166,25 +2172,31 @@ LLUZipHelper::EZipRresult LLUZipHelper::unzip_llsd(LLSD& data, std::istream& is,
 		strm.avail_out = CHUNK;
 		strm.next_out = out;
 		ret = inflate(&strm, Z_NO_FLUSH);
-		if (ret == Z_STREAM_ERROR)
-		{
-			inflateEnd(&strm);
-			free(result);
-			delete [] in;
-			return ZR_DATA_ERROR;
-		}
-		
+
+		bool failed = false;
+		EZipRresult retcode = ZR_OK;
 		switch (ret)
 		{
-		case Z_NEED_DICT:
-			ret = Z_DATA_ERROR;
-		case Z_DATA_ERROR:
 		case Z_MEM_ERROR:
+			retcode = ZR_MEM_ERROR;
+			failed = true;
+			break;
+		case Z_NEED_DICT:
+			retcode = ZR_PARSE_ERROR;
+			failed = true;
+			break;
+		case Z_DATA_ERROR:
+		case Z_STREAM_ERROR:
+			retcode = ZR_DATA_ERROR;
+			failed = true;
+			break;
+		}
+
+		if (failed)
+		{
 			inflateEnd(&strm);
 			free(result);
-			delete [] in;
-			return ZR_MEM_ERROR;
-			break;
+			return retcode;
 		}
 
 		U32 have = CHUNK-strm.avail_out;
@@ -2192,12 +2204,12 @@ LLUZipHelper::EZipRresult LLUZipHelper::unzip_llsd(LLSD& data, std::istream& is,
 		U8* new_result = (U8*)realloc(result, cur_size + have);
 		if (new_result == NULL)
 		{
+			LL_WARNS() << "Failed to unzip LLSD block: can't reallocate memory, current size: " << cur_size << " bytes; requested " << cur_size + have << " bytes." << LL_ENDL;
 			inflateEnd(&strm);
 			if (result)
 			{
 				free(result);
 			}
-			delete[] in;
 			return ZR_MEM_ERROR;
 		}
 		result = new_result;
@@ -2207,7 +2219,6 @@ LLUZipHelper::EZipRresult LLUZipHelper::unzip_llsd(LLSD& data, std::istream& is,
 	} while (ret == Z_OK);
 
 	inflateEnd(&strm);
-	delete [] in;
 
 	if (ret != Z_STREAM_END)
 	{
@@ -2217,38 +2228,13 @@ LLUZipHelper::EZipRresult LLUZipHelper::unzip_llsd(LLSD& data, std::istream& is,
 
 	//result now points to the decompressed LLSD block
 	{
-		std::istringstream istr;
-		// Since we are using this for meshes, data we are dealing with tend to be large.
-		// So string can potentially fail to allocate, make sure this won't cause problems
-		try
-		{
-			std::string res_str((char*)result, cur_size);
+		char* result_ptr = strip_deprecated_header((char*)result, cur_size);
 
-			std::string deprecated_header("<? LLSD/Binary ?>");
-
-			if (res_str.substr(0, deprecated_header.size()) == deprecated_header)
-			{
-				res_str = res_str.substr(deprecated_header.size() + 1, cur_size);
-			}
-			cur_size = res_str.size();
-
-			istr.str(res_str);
-		}
-#ifdef LL_WINDOWS
-		catch (std::length_error)
+		boost::iostreams::stream<boost::iostreams::array_source> istrm(result_ptr, cur_size);
+		
+		if (!LLSDSerialize::fromBinary(data, istrm, cur_size))
 		{
-			free(result);
-			return ZR_SIZE_ERROR;
-		}
-#endif
-		catch (std::bad_alloc)
-		{
-			free(result);
-			return ZR_MEM_ERROR;
-		}
-
-		if (!LLSDSerialize::fromBinary(data, istr, cur_size, UNZIP_LLSD_MAX_DEPTH))
-		{
+			LL_WARNS() << "Failed to unzip LLSD block" << LL_ENDL;
 			free(result);
 			return ZR_PARSE_ERROR;
 		}
@@ -2257,30 +2243,34 @@ LLUZipHelper::EZipRresult LLUZipHelper::unzip_llsd(LLSD& data, std::istream& is,
 	free(result);
 	return ZR_OK;
 }
+
 //This unzip function will only work with a gzip header and trailer - while the contents
 //of the actual compressed data is the same for either format (gzip vs zlib ), the headers
 //and trailers are different for the formats.
-U8* unzip_llsdNavMesh( bool& valid, unsigned int& outsize, std::istream& is, S32 size )
+U8* unzip_llsdNavMesh(bool& valid, unsigned int& outsize, std::istream& is, S32 size)
 {
 	if (size == 0)
 	{
 		LL_WARNS() << "No data to unzip." << LL_ENDL;
 		return NULL;
 	}
+	auto in = std::make_unique<U8[]>(size);
+	is.read((char*)in.get(), size);
+	return unzip_llsdNavMesh(valid, outsize, in.get(), size);
+}
 
+U8* unzip_llsdNavMesh( bool& valid, unsigned int& outsize, U8* in, S32 size )
+{
+	if (size == 0)
+	{
+		LL_WARNS() << "No data to unzip." << LL_ENDL;
+		return NULL;
+	}
 	U8* result = NULL;
 	U32 cur_size = 0;
 	z_stream strm;
 		
 	const U32 CHUNK = 0x4000;
-
-	U8 *in = new(std::nothrow) U8[size];
-	if (in == NULL)
-	{
-		LL_WARNS() << "Memory allocation failure." << LL_ENDL;
-		return NULL;
-	}
-	is.read((char*) in, size); 
 
 	U8 out[CHUNK];
 		
@@ -2297,27 +2287,18 @@ U8* unzip_llsdNavMesh( bool& valid, unsigned int& outsize, std::istream& is, S32
 		strm.avail_out = CHUNK;
 		strm.next_out = out;
 		ret = inflate(&strm, Z_NO_FLUSH);
-		if (ret == Z_STREAM_ERROR)
-		{
-			inflateEnd(&strm);
-			free(result);
-			delete [] in;
-			valid = false;
-		}
-		
 		switch (ret)
 		{
 		case Z_NEED_DICT:
 			ret = Z_DATA_ERROR;
 		case Z_DATA_ERROR:
 		case Z_MEM_ERROR:
+		case Z_STREAM_ERROR:
 			inflateEnd(&strm);
 			free(result);
-			delete [] in;
 			valid = false;
-			break;
+			return NULL;
 		}
-
 		U32 have = CHUNK-strm.avail_out;
 
 		U8* new_result = (U8*) realloc(result, cur_size + have);
@@ -2332,7 +2313,6 @@ U8* unzip_llsdNavMesh( bool& valid, unsigned int& outsize, std::istream& is, S32
 			{
 				free(result);
 			}
-			delete[] in;
 			valid = false;
 			return NULL;
 		}
@@ -2343,7 +2323,6 @@ U8* unzip_llsdNavMesh( bool& valid, unsigned int& outsize, std::istream& is, S32
 	} while (ret == Z_OK);
 
 	inflateEnd(&strm);
-	delete [] in;
 
 	if (ret != Z_STREAM_END)
 	{
@@ -2361,4 +2340,22 @@ U8* unzip_llsdNavMesh( bool& valid, unsigned int& outsize, std::istream& is, S32
 	return result;
 }
 
+char* strip_deprecated_header(char* in, U32& cur_size, U32* header_size)
+{
+	const char* deprecated_header = "<? LLSD/Binary ?>";
+	constexpr size_t deprecated_header_size = 17;
+
+	if (cur_size > deprecated_header_size
+		&& memcmp(in, deprecated_header, deprecated_header_size) == 0)
+	{
+		in = in + deprecated_header_size;
+		cur_size = cur_size - deprecated_header_size;
+		if (header_size)
+		{
+			*header_size = deprecated_header_size + 1;
+		}
+	}
+
+	return in;
+}
 

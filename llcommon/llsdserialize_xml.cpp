@@ -26,11 +26,11 @@
 
 #include "linden_common.h"
 #include "llsdserialize_xml.h"
+#include "llbase64.h"
 
 #include <iostream>
 #include <deque>
 
-#include "apr_base64.h"
 #include <boost/regex.hpp>
 
 extern "C"
@@ -38,7 +38,7 @@ extern "C"
 #ifdef LL_USESYSTEMLIBS
 # include <expat.h>
 #else
-# include "expat/expat.h"
+# include <expat.h>
 #endif
 }
 
@@ -189,17 +189,8 @@ S32 LLSDXMLFormatter::format_impl(const LLSD& data, std::ostream& ostr, U32 opti
 		}
 		else
 		{
-			// *FIX: memory inefficient.
-			// *TODO: convert to use LLBase64
 			ostr << pre << "<binary encoding=\"base64\">";
-			int b64_buffer_length = apr_base64_encode_len(buffer.size());
-			char* b64_buffer = new char[b64_buffer_length];
-			b64_buffer_length = apr_base64_encode_binary(
-				b64_buffer,
-				&buffer[0],
-				buffer.size());
-			ostr.write(b64_buffer, b64_buffer_length - 1);
-			delete[] b64_buffer;
+			ostr << LLBase64::encode(&buffer[0], buffer.size());
 			ostr << "</binary>" << post;
 		}
 		break;
@@ -346,9 +337,10 @@ void clear_eol(std::istream& input)
 static unsigned get_till_eol(std::istream& input, char *buf, unsigned bufsize)
 {
 	unsigned count = 0;
+	char c;
 	while (count < bufsize && input.good())
 	{
-		char c = input.get();
+		input.get(c);
 		buf[count++] = c;
 		if (is_eol(c))
 			break;
@@ -779,10 +771,10 @@ void LLSDXMLParser::Impl::endElementHandler(const XML_Char* name)
 			boost::regex r;
 			r.assign("\\s");
 			std::string stripped = boost::regex_replace(mCurrentContent, r, "");
-			S32 len = apr_base64_decode_len(stripped.c_str());
+			size_t len = LLBase64::requiredDecryptionSpace(stripped);
 			std::vector<U8> data;
 			data.resize(len);
-			len = apr_base64_decode_binary(&data[0], stripped.c_str());
+			len = LLBase64::decode(stripped, &data[0], len);
 			data.resize(len);
 			value = data;
 			break;
