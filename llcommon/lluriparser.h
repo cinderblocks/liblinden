@@ -1,7 +1,7 @@
 /** 
  * @file lluriparser.h
  * @author Protey
- * @date 20146-10-07
+ * @date 2016-10-07
  * @brief Declaration of the UriParser class.
  *
  * $LicenseInfo:firstyear=2014&license=viewerlgpl$
@@ -30,7 +30,7 @@
 #define LL_LLURIPARSER_H
 
 #include <string>
-#include "uriparser/Uri.h"
+#include <uriparser/Uri.h>
 
 class LL_COMMON_API LLUriParser
 {

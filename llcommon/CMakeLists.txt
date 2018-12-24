@@ -255,6 +255,7 @@ find_package(boost_system)
 find_package(expat)
 find_package(jsoncpp)
 find_package(OpenSSL)
+find_package(uriparser)
 find_package(zlib)
 
 target_link_libraries(
@@ -264,6 +265,7 @@ target_link_libraries(
     OpenSSL::OpenSSL
     expat::expat
     jsoncpp::jsoncpp
+    uriparser::uriparser
     zlib::zlib
     boost_asio::boost_asio
     boost_context::boost_context
