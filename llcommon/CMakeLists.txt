@@ -249,6 +249,7 @@ find_package(boost_graph)
 find_package(boost_program_options)
 find_package(boost_ptr_container)
 find_package(boost_regex)
+find_package(boost_signals2)
 find_package(boost_system)
 find_package(expat)
 find_package(OpenSSL)
@@ -267,6 +268,7 @@ target_link_libraries(
     boost_program_options::boost_program_options
     boost_ptr_container::boost_ptr_container
     boost_regex::boost_regex
+    boost_signals2::boost_signals2
     boost_system::boost_system
 #    ${APRUTIL_LIBRARIES}
 #    ${APR_LIBRARIES}
