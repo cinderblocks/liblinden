@@ -1,4 +1,5 @@
 [requires]
+boost_asio/1.69.0@bincrafters/stable
 boost_context/1.69.0@bincrafters/stable
 boost_fiber/1.69.0@bincrafters/stable
 boost_date_time/1.69.0@bincrafters/stable

@@ -242,7 +242,8 @@ list(APPEND llcommon_SOURCE_FILES ${llcommon_HEADER_FILES})
 
 add_library (llcommon ${llcommon_SOURCE_FILES})
 find_package(apache-apr)
-#find_package(apache-apr-util)
+find_package(apache-apr-util)
+find_package(boost_asio)
 find_package(boost_context)
 find_package(boost_fiber)
 find_package(boost_graph)
@@ -259,11 +260,12 @@ find_package(zlib)
 target_link_libraries(
     llcommon PUBLIC
     apache-apr::apache-apr
-#    apache-apr-util::apache-apr-util
+    apache-apr-util::apache-apr-util
     OpenSSL::OpenSSL
     expat::expat
     jsoncpp::jsoncpp
     zlib::zlib
+    boost_asio::boost_asio
     boost_context::boost_context
     boost_fiber::boost_fiber
     boost_graph::boost_graph
