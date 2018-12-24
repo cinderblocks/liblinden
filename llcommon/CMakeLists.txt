@@ -252,6 +252,7 @@ find_package(boost_regex)
 find_package(boost_signals2)
 find_package(boost_system)
 find_package(expat)
+find_package(jsoncpp)
 find_package(OpenSSL)
 find_package(zlib)
 
@@ -261,6 +262,7 @@ target_link_libraries(
 #    apache-apr-util::apache-apr-util
     OpenSSL::OpenSSL
     expat::expat
+    jsoncpp::jsoncpp
     zlib::zlib
     boost_context::boost_context
     boost_fiber::boost_fiber

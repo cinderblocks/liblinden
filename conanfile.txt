@@ -14,6 +14,7 @@ boost_thread/1.69.0@bincrafters/stable
 apache-apr/1.6.5@radegast/stable
 apache-apr-util/1.6.1@radegast/stable
 expat/2.2.5@bincrafters/stable
+jsoncpp/1.8.4@theirix/stable
 libcurl/7.56.1@bincrafters/stable
 OpenSSL/1.1.1a@conan/stable
 zlib/1.2.11@conan/stable
