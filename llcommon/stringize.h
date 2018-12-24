@@ -31,7 +31,7 @@
 
 #include <sstream>
 #include <boost/phoenix/phoenix.hpp>
-#include <llstring.h>
+#include "llstring.h"
 
 /**
  * gstringize(item) encapsulates an idiom we use constantly, using
