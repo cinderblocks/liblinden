@@ -26,7 +26,6 @@ set(llmessage_SOURCE_FILES
     llassetstorage.cpp
     llavatarname.cpp
     llavatarnamecache.cpp
-    llblowfishcipher.cpp
     llbuffer.cpp
     llbufferstream.cpp
     llcachename.cpp
@@ -105,7 +104,6 @@ set(llmessage_HEADER_FILES
     llassetstorage.h
     llavatarname.h
     llavatarnamecache.h
-    llblowfishcipher.h
     llbuffer.h
     llbufferstream.h
     llcachename.h
@@ -201,11 +199,15 @@ add_library (llmessage ${llmessage_SOURCE_FILES})
 target_include_directories(llmessage PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
 
+find_package(libcurl)
+
 target_link_libraries(
   llmessage PUBLIC
   llcommon
   llvfs
   llmath
+  libcurl::libcurl
+  OpenSSL::OpenSSL
 #  ${CURL_LIBRARIES}
 #  ${LLCOMMON_LIBRARIES}
 #  ${LLVFS_LIBRARIES}
