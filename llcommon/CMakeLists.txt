@@ -241,6 +241,9 @@ set_source_files_properties(${llcommon_HEADER_FILES}
 list(APPEND llcommon_SOURCE_FILES ${llcommon_HEADER_FILES})
 
 add_library (llcommon ${llcommon_SOURCE_FILES})
+target_include_directories(llcommon PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
+
 find_package(apache-apr)
 find_package(apache-apr-util)
 find_package(boost_asio)
@@ -276,18 +279,5 @@ target_link_libraries(
     boost_regex::boost_regex
     boost_signals2::boost_signals2
     boost_system::boost_system
-#    ${APRUTIL_LIBRARIES}
-#    ${APR_LIBRARIES}
-#    ${EXPAT_LIBRARIES}
-#    ${JSONCPP_LIBRARIES}
-#    ${ZLIB_LIBRARIES}
-#    ${WINDOWS_LIBRARIES}
-#    ${BOOST_COROUTINE_LIBRARY}
-#    ${BOOST_CONTEXT_LIBRARY}
-#    ${BOOST_PROGRAM_OPTIONS_LIBRARY}
-#    ${BOOST_REGEX_LIBRARY}
-#    ${BOOST_SYSTEM_LIBRARY}
-#    ${GOOGLE_PERFTOOLS_LIBRARIES}
-#    ${URIPARSER_LIBRARIES}
     )
 

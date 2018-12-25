@@ -198,6 +198,8 @@ set_source_files_properties(${llmessage_HEADER_FILES}
 list(APPEND llmessage_SOURCE_FILES ${llmessage_HEADER_FILES})
 
 add_library (llmessage ${llmessage_SOURCE_FILES})
+target_include_directories(llmessage PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
 
 target_link_libraries(
   llmessage PUBLIC

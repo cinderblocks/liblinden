@@ -32,6 +32,9 @@ set_source_files_properties(${llxml_HEADER_FILES}
 list(APPEND llxml_SOURCE_FILES ${llxml_HEADER_FILES})
 
 add_library (llxml ${llxml_SOURCE_FILES})
+target_include_directories(llxml PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
+
 find_package(expat)
 
 target_link_libraries(

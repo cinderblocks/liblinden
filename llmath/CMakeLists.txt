@@ -95,6 +95,8 @@ set_source_files_properties(${llmath_HEADER_FILES}
 list(APPEND llmath_SOURCE_FILES ${llmath_HEADER_FILES})
 
 add_library (llmath ${llmath_SOURCE_FILES})
+target_include_directories(llmath PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
 
 target_link_libraries(
     llmath PUBLIC

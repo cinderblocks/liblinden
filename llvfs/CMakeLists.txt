@@ -59,6 +59,10 @@ set_source_files_properties(${llvfs_HEADER_FILES}
 list(APPEND llvfs_SOURCE_FILES ${llvfs_HEADER_FILES})
 
 add_library (llvfs ${llvfs_SOURCE_FILES})
+target_include_directories(llvfs PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
+
+find_package()
 
 target_link_libraries(
     llvfs PUBLIC

@@ -68,6 +68,8 @@ set_source_files_properties(${llcharacter_HEADER_FILES}
 list(APPEND llcharacter_SOURCE_FILES ${llcharacter_HEADER_FILES})
 
 add_library (llcharacter ${llcharacter_SOURCE_FILES})
+target_include_directories(llcharacter PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
 
 target_link_libraries(
     llcharacter PUBLIC
