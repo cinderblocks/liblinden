@@ -73,24 +73,22 @@ set(llcorehttp_HEADER_FILES
 
 set_source_files_properties(${llcorehttp_HEADER_FILES}
                             PROPERTIES HEADER_FILE_ONLY TRUE)
-if (DARWIN OR LINUX)
-  # Boost headers define unused members in condition_variable so...
-  set_source_files_properties(${llcorehttp_SOURCE_FILES}
-                              PROPERTIES COMPILE_FLAGS -Wno-unused-variable)
-endif (DARWIN OR LINUX)
 
 list(APPEND llcorehttp_SOURCE_FILES ${llcorehttp_HEADER_FILES})
 
 add_library (llcorehttp ${llcorehttp_SOURCE_FILES})
+target_include_directories(llcorehttp PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
+
 find_package(libcurl)
 find_package(OpenSSL)
-find_package(boost)
 
 target_link_libraries(
   llcorehttp
+  llcommon
+  llmessage
   libcurl::libcurl
   OpenSSL::OpenSSL
-  boost::boost
 #  ${CURL_LIBRARIES}
 #  ${OPENSSL_LIBRARIES}
 #  ${CRYPTO_LIBRARIES}

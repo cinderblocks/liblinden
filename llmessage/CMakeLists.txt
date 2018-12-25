@@ -204,6 +204,7 @@ find_package(libcurl)
 target_link_libraries(
   llmessage PUBLIC
   llcommon
+  llcorehttp
   llvfs
   llmath
   libcurl::libcurl

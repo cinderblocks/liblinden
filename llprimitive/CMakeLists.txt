@@ -4,12 +4,6 @@ project(llprimitive)
 cmake_minimum_required(VERSION 3.13)
 
 set(CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
-#include(LLCommon)
-#include(LLMath)
-#include(LLMessage)
-#include(LLCoreHttp)
-#include(LLXML)
-#include(LLCharacter)
 
 set(llprimitive_SOURCE_FILES
     lldaeloader.cpp

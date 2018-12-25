@@ -62,11 +62,7 @@ add_library (llvfs ${llvfs_SOURCE_FILES})
 target_include_directories(llvfs PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
 
-find_package()
-
 target_link_libraries(
     llvfs PUBLIC
     llcommon
-#    ${LLCOMMON_LIBRARIES}
-#    ${vfs_BOOST_LIBRARIES}
     )
